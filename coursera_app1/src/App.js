@@ -9,7 +9,8 @@ function App() {
   function handleClick() {
     counters[0] += 1
     console.log("Counters: ", counters);
-    setCounters(counters)
+    let counters2 = counters.slice()
+    setCounters(counters2)
   }
   function handleClick2() {
     counter2 += 1
