@@ -39,9 +39,7 @@ const SubscribeScreen = () => {
           Alert.alert("", "Thanks for the subscribing, stay tuned!");
         }}
       >
-        <Text style={styles.buttonText}>
-          {isEmailValid ? "Subscribe" : "Please provide valid email"}
-        </Text>
+        <Text style={styles.buttonText}>Subscribe</Text>
       </Pressable>
     </KeyboardAvoidingView>
   );

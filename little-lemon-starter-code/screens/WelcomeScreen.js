@@ -6,13 +6,16 @@ const logo = require("../assets/little-lemon-logo.png");
 const WelcomeScreen = ({ navigation }) => {
   // Add welcome screen code here.
   return (
-    <View style={styles.container}>
-      <Image source={logo} style={styles.image} />
-      <Text style={styles.text}>
-        Little Lemon, your local Mediterranean Bistro
-      </Text>
-      <View style={styles.button}>
+    <View style={styles.outerContainer}>
+      <View style={styles.container}>
+        <Image source={logo} style={styles.image} />
+        <Text style={styles.text}>
+          Little Lemon, your local Mediterranean Bistro
+        </Text>
+      </View>
+      <View style={styles.buttonContainer}>
         <Pressable
+          style={styles.button}
           onPress={() => {
             navigation.navigate("SubscribeScreen");
           }}
@@ -25,6 +28,10 @@ const WelcomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    padding: 24,
+  },
   container: {
     flex: 1,
     alignItems: "center", // horizontal alignment
@@ -38,14 +45,14 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
   },
+  buttonContainer: { justifyContent: "center", alignItems: "center" },
   button: {
     backgroundColor: "#09471b",
     width: 300,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 80,
-    //marginTop: "auto",
+    marginBottom: 20,
   },
   buttonText: {
     color: "white",
