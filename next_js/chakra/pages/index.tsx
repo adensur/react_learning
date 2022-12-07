@@ -18,9 +18,19 @@ import {
 } from "@chakra-ui/react";
 
 import SignupModal from "../components/signup";
+import LoginModal from "../components/login";
 
 export default function Home() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenSignup,
+    onOpen: onOpenSignup,
+    onClose: onCloseSignup
+  } = useDisclosure();
+  const {
+    isOpen: isOpenLogin,
+    onOpen: onOpenLogin,
+    onClose: onCloseLogin
+  } = useDisclosure();
 
   return (
     <>
@@ -33,7 +43,7 @@ export default function Home() {
         overflow="auto"
       >
         <GridItem area="header">
-          <Text>Some heading</Text>
+          <Text>Badger Clone</Text>
         </GridItem>
         <GridItem area="main">
           <Flex
@@ -42,14 +52,14 @@ export default function Home() {
             justifyContent="center"
             height="100%"
           >
-            <Button onClick={onOpen}>Open Modal</Button>
-            <Button onClick={onOpen}>Open Modal</Button>
-            <Button onClick={onOpen}>Open Modal</Button>
+            <Button onClick={onOpenSignup}>Sign up</Button>
+            <Button onClick={onOpenLogin}>Login</Button>
           </Flex>
         </GridItem>
       </Grid>
 
-      <SignupModal isOpen={isOpen} onClose={onClose} />
+      <SignupModal isOpen={isOpenSignup} onClose={onCloseSignup} />
+      <LoginModal isOpen={isOpenLogin} onClose={onCloseLogin} />
     </>
   );
 }

@@ -28,24 +28,24 @@ import { useEffect, useState } from "react";
 
 // Import the functions you need from the SDKs you need
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import { app } from "./firebase_init";
 import PasswordInput from "./password_form";
 
-type SignUpModalProps = {
+type LoginModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-export default function SignupModal({ isOpen, onClose }: SignUpModalProps) {
+export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Modal Title</ModalHeader>
+        <ModalHeader>Log In</ModalHeader>
         <ModalCloseButton />
         <ModalBody>Hello!</ModalBody>
 
@@ -67,27 +67,31 @@ export default function SignupModal({ isOpen, onClose }: SignUpModalProps) {
             mr={3}
             onClick={() => {
               console.log(
-                "Creating user with email and password: ",
+                "Logging in with email and password: ",
                 email,
                 password
               );
               const auth = getAuth(app);
-              createUserWithEmailAndPassword(auth, email, password)
+              signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                   // Signed in
                   const user = userCredential.user;
-                  console.log("Created user: ", user);
+                  console.log("Logged in with user: ", user);
                   // ...
                 })
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
-                  console.log("Error creating user: ", errorCode, errorMessage);
+                  console.log(
+                    "Error loggin in user: ",
+                    errorCode,
+                    errorMessage
+                  );
                 });
               onClose();
             }}
           >
-            Create User
+            Log In
           </Button>
           <Button variant="ghost" onClick={onClose}>
             Cancel
