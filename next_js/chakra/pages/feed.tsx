@@ -31,20 +31,22 @@ export default function Feed() {
   let [uid, setUid] = useState<string | null>(null);
   const router = useRouter();
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        console.log("Got user id: ", user.uid);
-        setUid(user.uid);
-        // ...
-      } else {
-        console.log("Got no user id");
-        // User is signed out
-        // ...
-        router.push(config.homeHref);
-      }
-    });
+    if (!uid) {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          console.log("Got user id: ", user.uid);
+          setUid(user.uid);
+          // ...
+        } else {
+          console.log("Got no user id");
+          // User is signed out
+          // ...
+          router.push(config.homeHref);
+        }
+      });
+    }
   });
   console.log("Got user id2: ", uid);
   if (uid) {
