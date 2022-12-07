@@ -1,3 +1,4 @@
 export const config = {
-  feedHref: "/feed"
+  feedHref: "/feed",
+  homeHref: "/"
 };
