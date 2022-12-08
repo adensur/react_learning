@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { app } from "../components/firebase_init";
 import { config } from "../utils/config";
 import Layout from "../components/layout";
+import AddSongModal from "../components/add_song";
 
 export default function Feed() {
   const auth = getAuth(app);
@@ -47,12 +48,19 @@ export default function Feed() {
     }
   });
   console.log("Got user id2: ", uid);
+  const {
+    isOpen: isOpenAddSong,
+    onOpen: onOpenAddSong,
+    onClose: onCloseAddSong
+  } = useDisclosure();
   if (uid) {
     return (
       <>
         <Layout>
           <Text>Welcome, {uid}</Text>
+          <Button onClick={onOpenAddSong}>Add Song</Button>
         </Layout>
+        <AddSongModal isOpen={isOpenAddSong} onClose={onCloseAddSong} />
       </>
     );
   } else {
