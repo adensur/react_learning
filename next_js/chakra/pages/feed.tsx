@@ -18,13 +18,11 @@ import {
 } from "@chakra-ui/react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import SignupModal from "../components/signup";
-import LoginModal from "../components/login";
 import { app } from "../components/firebase_init";
 import { config } from "../utils/config";
-import { useEffect } from "react";
-import { useState } from "react";
+import Layout from "../components/layout";
 
 export default function Feed() {
   const auth = getAuth(app);
@@ -52,13 +50,17 @@ export default function Feed() {
   if (uid) {
     return (
       <>
-        <Text>Welcome, {uid}</Text>
+        <Layout>
+          <Text>Welcome, {uid}</Text>
+        </Layout>
       </>
     );
   } else {
     return (
       <>
-        <Text>Loading</Text>
+        <Layout>
+          <Text>Loading</Text>
+        </Layout>
       </>
     );
   }

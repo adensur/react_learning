@@ -19,6 +19,7 @@ import {
 
 import SignupModal from "../components/signup";
 import LoginModal from "../components/login";
+import Layout from "../components/layout";
 
 export default function Home() {
   const {
@@ -34,29 +35,10 @@ export default function Home() {
 
   return (
     <>
-      <Grid
-        height="100vh"
-        width="100vw"
-        gridTemplateRows="auto 1fr"
-        templateAreas={`"header"
-          "main"`}
-        overflow="auto"
-      >
-        <GridItem area="header">
-          <Text>Badger Clone</Text>
-        </GridItem>
-        <GridItem area="main">
-          <Flex
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-          >
-            <Button onClick={onOpenSignup}>Sign up</Button>
-            <Button onClick={onOpenLogin}>Login</Button>
-          </Flex>
-        </GridItem>
-      </Grid>
+      <Layout>
+        <Button onClick={onOpenSignup}>Sign up</Button>
+        <Button onClick={onOpenLogin}>Login</Button>
+      </Layout>
 
       <SignupModal isOpen={isOpenSignup} onClose={onCloseSignup} />
       <LoginModal isOpen={isOpenLogin} onClose={onCloseLogin} />
