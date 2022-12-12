@@ -12,7 +12,8 @@ export const firebaseConfig = {
   storageBucket: "badger-clone.appspot.com",
   messagingSenderId: "357285243423",
   appId: "1:357285243423:web:fef24c53cb9d3674fa032a",
-  measurementId: "G-MRWPF9SK02"
+  measurementId: "G-MRWPF9SK02",
+  databaseURL: "https://badger-clone-default-rtdb.firebaseio.com"
 };
 
 // Initialize Firebase

@@ -2,16 +2,7 @@
 import { request } from "http";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Track = {
-  name: string;
-  artists: string;
-  id: string;
-};
-
-type Data = {
-  content: string;
-  tracks: Array<Track>;
-};
+import type { Data } from "../../utils/data";
 
 export default async function handler(
   req: NextApiRequest,
