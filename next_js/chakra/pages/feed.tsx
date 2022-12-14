@@ -1,58 +1,36 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-  Flex,
-  Grid,
-  Heading,
-  HStack,
-  Box,
-  Text,
-  GridItem
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Button, useDisclosure, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, child, push, update, set } from "firebase/database";
+import * as _ from "lodash";
+import { getDatabase, ref, child, push, set, onValue } from "firebase/database";
 
 import { app } from "../components/firebase_init";
-import { config } from "../utils/config";
 import Layout from "../components/layout";
 import AddSongModal from "../components/add_song";
 import AddSongModal2 from "../components/add_song2";
-import type { Data, Track, ExtendedTrack } from "../utils/data";
+import type { Track, ExtendedTrack } from "../utils/data";
+import useAuth from "../utils/auth";
 
 export default function Feed() {
-  const auth = getAuth(app);
-  let [uid, setUid] = useState<string | null>(null);
-  const router = useRouter();
+  const uid = useAuth();
+  let [userSnapshot, setUserSnapshot] = useState<any | null>(null);
   const db = getDatabase(app);
   useEffect(() => {
-    if (!uid) {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          console.log("Got user id: ", user.uid);
-          setUid(user.uid);
-          // ...
-        } else {
-          console.log("Got no user id");
-          // User is signed out
-          // ...
-          router.push(config.homeHref);
+    // set up firebase db listener
+    const query = ref(db, "users/" + uid);
+    return onValue(query, (snapshot) => {
+      const data = snapshot.val();
+      if (snapshot.exists()) {
+        console.log("Data: ", data);
+        console.log("User Snapshot: ", userSnapshot);
+        if (!_.isEqual(data, userSnapshot)) {
+          console.log("Data != user snapshot!");
+          setUserSnapshot(data);
         }
-      });
-    }
+      }
+    });
   });
-  console.log("Got user id2: ", uid);
+  console.log("Got user snapshot: ", userSnapshot);
   const {
     isOpen: isOpenAddSong,
     onOpen: onOpenAddSong,
@@ -65,34 +43,32 @@ export default function Feed() {
     onClose: onCloseAddSong2
   } = useDisclosure();
   if (uid) {
-    if (!selectedTrack) {
-      return (
-        <>
-          <Layout>
-            <Text>Welcome, {uid}</Text>
-            <Button onClick={onOpenAddSong}>Add Song</Button>
-          </Layout>
-          <AddSongModal
-            isOpen={isOpenAddSong}
-            onClose={onCloseAddSong}
-            submitCallback={(track: Track) => {
-              console.log("Selected track: ", track);
-              setSelectedTrack(track);
-            }}
-          />
-        </>
-      );
-    } else {
-      return (
-        <>
-          <Layout>
-            <Text>Welcome, {uid}</Text>
-            <Button onClick={onOpenAddSong}>Add Song</Button>
-          </Layout>
+    return (
+      <>
+        <Layout>
+          <Text>Welcome, {uid}</Text>
+          <Button onClick={onOpenAddSong}>Add Song</Button>
+        </Layout>
+        {
+          //userSnapshot &&
+          // userSnapshot!!.tracks.map((track: any, idx: number) => (
+          //  <Text key={idx}>{track}</Text>
+          //))
+        }
+        <AddSongModal
+          isOpen={isOpenAddSong}
+          onClose={onCloseAddSong}
+          submitCallback={(track: Track) => {
+            console.log("Selected track: ", track);
+            setSelectedTrack(track);
+            onOpenAddSong2();
+          }}
+        />
+        {selectedTrack && (
           <AddSongModal2
-            isOpen={isOpenAddSong}
-            onClose={onCloseAddSong}
-            selectedTrack={selectedTrack}
+            isOpen={isOpenAddSong2}
+            onClose={onCloseAddSong2}
+            selectedTrack={selectedTrack!!}
             submitCallback={(track: ExtendedTrack) => {
               console.log("Selected track: ", track);
               const newPostKey = push(child(ref(db), "posts")).key;
@@ -106,15 +82,8 @@ export default function Feed() {
               });
             }}
           />
-        </>
-      );
-    }
-  } else {
-    return (
-      <>
-        <Layout>
-          <Text>Loading</Text>
-        </Layout>
+        )}
+        ;
       </>
     );
   }
