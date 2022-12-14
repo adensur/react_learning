@@ -1,4 +1,4 @@
-import { Button, useDisclosure, Text } from "@chakra-ui/react";
+import { Button, useDisclosure, Text, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 import * as _ from "lodash";
@@ -10,24 +10,17 @@ import AddSongModal from "../components/add_song";
 import AddSongModal2 from "../components/add_song2";
 import type { Track, ExtendedTrack } from "../utils/data";
 import useAuth from "../utils/auth";
+import FeedTrack from "../components/feed_song";
 
 function Tracks({ tracks }: { tracks: Array<ExtendedTrack> }) {
   return (
-    <>
-      {tracks.map((track: ExtendedTrack, idx: number) => {
-        return (
-          <Text key={idx}>
-            {track.track.artists +
-              ": " +
-              track.track.name +
-              "; note: " +
-              track.note +
-              "; state: " +
-              track.state}
-          </Text>
-        );
-      })}
-    </>
+    <Flex flexDirection="column">
+      <>
+        {tracks.map((track: ExtendedTrack, idx: number) => {
+          return <FeedTrack flex="1" key={idx} track={track} />;
+        })}
+      </>
+    </Flex>
   );
 }
 
